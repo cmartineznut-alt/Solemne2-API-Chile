@@ -17,7 +17,6 @@ from api import ClienteDatosGob
 # ==========================================
 st.set_page_config(
     page_title="Establecimientos de Salud - Chile",
-    page_icon="🏥",
     layout="wide",
 )
 
@@ -38,7 +37,7 @@ def cargar_datos():
 # ==========================================
 # ENCABEZADO
 # ==========================================
-st.title("🏥 Establecimientos de Salud en Chile")
+st.title("Establecimientos de Salud en Chile")
 st.markdown(
     "Explorador interactivo de los establecimientos de salud registrados "
     "en el Ministerio de Salud de Chile. "
@@ -53,7 +52,7 @@ with st.spinner("Descargando datos desde datos.gob.cl..."):
 # ==========================================
 # SIDEBAR CON FILTROS INTERACTIVOS
 # ==========================================
-st.sidebar.header("🎛️ Filtros")
+st.sidebar.header("Filtros")
 st.sidebar.markdown("Ajusta los filtros para explorar el dataset.")
 
 # --- Filtro 1: Región (multi-select) ---
@@ -61,7 +60,7 @@ regiones_disponibles = sorted(df["RegionGlosa"].dropna().unique())
 regiones_seleccionadas = st.sidebar.multiselect(
     "Región",
     options=regiones_disponibles,
-    default=regiones_disponibles,  # por defecto todas seleccionadas
+    default=regiones_disponibles,
     help="Selecciona una o más regiones del país.",
 )
 
@@ -109,7 +108,7 @@ if solo_urgencia:
 # ==========================================
 # MÉTRICAS RESUMEN (KPIs)
 # ==========================================
-st.markdown("### 📊 Resumen")
+st.markdown("### Resumen")
 col1, col2, col3, col4 = st.columns(4)
 
 total = len(df_filtrado)
@@ -126,7 +125,7 @@ col4.metric("Con urgencia", f"{n_con_urgencia:,}")
 # ==========================================
 # PESTAÑAS CON TABLA, GRÁFICOS Y MAPA
 # ==========================================
-tab_tabla, tab_graficos, tab_mapa = st.tabs(["📋 Tabla", "📈 Gráficos", "🗺️ Mapa"])
+tab_tabla, tab_graficos, tab_mapa = st.tabs(["Tabla", "Gráficos", "Mapa"])
 
 
 # --- PESTAÑA 1: TABLA ---
@@ -134,7 +133,7 @@ with tab_tabla:
     st.markdown("### Tabla de datos filtrados")
 
     if df_filtrado.empty:
-        st.warning("⚠️ No hay establecimientos que cumplan los filtros seleccionados.")
+        st.warning("No hay establecimientos que cumplan los filtros seleccionados.")
     else:
         columnas_visibles = [
             "EstablecimientoGlosa",
@@ -156,14 +155,14 @@ with tab_tabla:
 # --- PESTAÑA 2: GRÁFICOS ---
 with tab_graficos:
     if df_filtrado.empty:
-        st.warning("⚠️ No hay datos para graficar con los filtros actuales.")
+        st.warning("No hay datos para graficar con los filtros actuales.")
     else:
         # Color institucional para los gráficos
         COLOR_PRIMARIO = "#005088"
         COLOR_SECUNDARIO = "#E63946"
 
         # ----- Gráfico 1: Top regiones por cantidad de establecimientos -----
-        st.markdown("### 🌎 Establecimientos por región")
+        st.markdown("### Establecimientos por región")
         conteo_regiones = df_filtrado["RegionGlosa"].value_counts().head(10)
 
         fig1, ax1 = plt.subplots(figsize=(10, 5))
@@ -183,7 +182,7 @@ with tab_graficos:
 
         # ----- Gráfico 2: Tipo de establecimiento (top 8) -----
         with col_g1:
-            st.markdown("### 🏥 Tipos de establecimiento")
+            st.markdown("### Tipos de establecimiento")
             conteo_tipos = df_filtrado["TipoEstablecimientoGlosa"].value_counts().head(8)
 
             fig2, ax2 = plt.subplots(figsize=(6, 5))
@@ -198,7 +197,7 @@ with tab_graficos:
 
         # ----- Gráfico 3: Dependencia (pie chart) -----
         with col_g2:
-            st.markdown("### 🏛️ Dependencia administrativa")
+            st.markdown("### Dependencia administrativa")
             conteo_dep = df_filtrado["DependenciaAdministrativa"].value_counts().head(6)
 
             fig3, ax3 = plt.subplots(figsize=(6, 5))
@@ -216,7 +215,7 @@ with tab_graficos:
 
 # --- PESTAÑA 3: MAPA ---
 with tab_mapa:
-    st.markdown("### 🗺️ Ubicación geográfica")
+    st.markdown("### Ubicación geográfica")
     st.caption(
         "Mapa interactivo con las coordenadas reales de cada establecimiento. "
         "Usa los filtros del panel lateral para acotar la vista."
@@ -234,7 +233,7 @@ with tab_mapa:
     ]
 
     if df_mapa.empty:
-        st.warning("⚠️ No hay coordenadas válidas para mostrar en el mapa.")
+        st.warning("No hay coordenadas válidas para mostrar en el mapa.")
     else:
         st.map(df_mapa[["lat", "lon"]], zoom=4)
         st.caption(f"Se muestran {len(df_mapa):,} establecimientos con coordenadas válidas.")
@@ -245,6 +244,6 @@ with tab_mapa:
 # ==========================================
 st.divider()
 st.caption(
-    "🎓 Solemne II — Taller de Programación II | Universidad San Sebastián | "
+    "Solemne II — Taller de Programación II | Universidad San Sebastián | "
     "Datos: Ministerio de Salud de Chile vía API datos.gob.cl"
 )
